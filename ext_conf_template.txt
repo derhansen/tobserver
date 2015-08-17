@@ -1,0 +1,8 @@
+# cat=basic; type=string; label=Instance ID:
+instanceId =
+
+# cat=basic; type=string; label=Auth token for the instance:
+authToken=
+
+# cat=basic; type=string; label=tobserver.com API URL:
+apiUrl =
