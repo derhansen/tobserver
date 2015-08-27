@@ -14,6 +14,8 @@ namespace Derhansen\Tobserver\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\DebugUtility;
+
 /**
  * Class ExtensionService
  *
@@ -49,7 +51,8 @@ class ExtensionService {
 				$extensions[] = array(
 					'key' => $installedExtension['key'],
 					'title' => $installedExtension['title'],
-					'version' => $installedExtension['version']
+					'version' => $installedExtension['version'],
+					'installed' => $installedExtension['installed']
 				);
 			}
 		}
