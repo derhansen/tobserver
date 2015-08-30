@@ -46,6 +46,21 @@ class ApiService {
 	}
 
 	/**
+	 * @var \Derhansen\Tobserver\Service\BackendUserService
+	 * @inject
+	 */
+	protected $backendUserService;
+
+	/**
+	 * DI for backendUserService
+	 *
+	 * @param BackendUserService $backendUserService
+	 */
+	public function injectBackendUserService(\Derhansen\Tobserver\Service\BackendUserService $backendUserService) {
+		$this->backendUserService = $backendUserService;
+	}
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
@@ -73,6 +88,7 @@ class ApiService {
 		$data = array (
 			'typo3_core_version' => TYPO3_version,
 			'extensions' => $this->extensionService->getInstalledExtensions(),
+			'beusers' => $this->backendUserService->getBackendUsers(),
 		);
 
 		$result = $this->sendRequest('POST', '/instancestatus/' . $this->instanceId, $data);
