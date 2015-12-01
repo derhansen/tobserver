@@ -5,4 +5,4 @@ instanceId =
 authToken=
 
 # cat=basic; type=string; label=tobserver.com API URL:
-apiUrl =
+apiUrl = https://tobserver.com/api/v1
