@@ -164,7 +164,6 @@ class ApiService {
 
 		if ($exceptionMessage) {
 			throw new CommandException($exceptionMessage, time());
-			throw new CommandException($exceptionMessage, time());
 		} else {
 			return TRUE;
 		}
