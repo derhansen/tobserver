@@ -36,4 +36,13 @@ class InstanceStatusCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 	public function updateCommand() {
 		return $this->apiService->updateStatus();
 	}
+
+	/**
+	 * The checkApiConnectivity command
+	 *
+	 * @return bool
+	 */
+	public function checkApiConnectivityCommand() {
+		return $this->apiService->checkApiConnectivity();
+	}
 }

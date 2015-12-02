@@ -13,7 +13,8 @@ namespace Derhansen\Tobserver\Service;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use TYPO3\CMS\Core\Utility\DebugUtility;
+
+use TYPO3\CMS\Extbase\Mvc\Exception\CommandException;
 
 /**
  * Class ApiService
@@ -78,13 +79,9 @@ class ApiService {
 	 * Updates the status of the instance
 	 *
 	 * @return bool
+	 * @throws CommandException
 	 */
 	public function updateStatus() {
-		if (!$this->initialized) {
-			// @todo set error message
-			return FALSE;
-		}
-
 		$data = array (
 			'typo3_core_version' => TYPO3_version,
 			'extensions' => $this->extensionService->getInstalledExtensions(),
@@ -92,20 +89,42 @@ class ApiService {
 		);
 
 		$result = $this->sendRequest('POST', '/instancestatus/' . $this->instanceId, $data);
-		return FALSE;
+		return $result;
 	}
 
 	/**
-	 * Sends a request to the API
+	 * Checks API Connectivity
+	 *
+	 * @return bool
+	 * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
+	 */
+	public function checkApiConnectivity() {
+		$result = $this->sendRequest('GET', '/checkconnectivity/' . $this->instanceId);
+		return $result;
+	}
+
+
+	/**
+	 * Sends the API request
 	 *
 	 * @param string $method
 	 * @param string $action
-	 * @param array $data
-	 * @return mixed
+	 * @param string $data
+	 * @return bool
+	 * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
 	 */
-	protected function sendRequest($method, $action, $data) {
+	protected function sendRequest($method, $action, $data = '') {
+		if (!$this->initialized) {
+			throw new CommandException('Configuration error - check tObserver extension settings', time());
+		}
+
 		$curl = curl_init();
 		$jsonData = json_encode($data);
+		$exceptionMessage = '';
+
+		$curlOptions = array(
+			'x-auth-token: ' . $this->authToken
+		);
 
 		switch ($method) {
 			case 'POST':
@@ -114,27 +133,38 @@ class ApiService {
 				if ($data) {
 					curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
 				}
+
+				$curlOptions['Content-Type'] = 'application/json';
+				$curlOptions['Content-Length'] = 'application/json';
 				break;
 			default:
+				$curlOptions['Content-Type'] = 'text/plain';
 		}
 
 		curl_setopt($curl, CURLOPT_URL, $this->apiUrl . $action);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_HEADER, 1);
 
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array (
-			'Content-Type: application/json',
-			'Content-Length: ' . strlen($jsonData),
-			'x-auth-token: ' . $this->authToken
-		));
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $curlOptions);
 
 		$response = curl_exec($curl);
 		$httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 		curl_close($curl);
 
-		if ($httpcode !== 200) {
-			return FALSE;
+		switch($httpcode) {
+			case '0':
+				$exceptionMessage = 'API failure - API may be down.';
+				break;
+			case '401':
+				$exceptionMessage = 'API connectivity check not successful due to Authentication failure.';
+				break;
+			default:
+		}
+
+		if ($exceptionMessage) {
+			throw new CommandException($exceptionMessage, time());
+			throw new CommandException($exceptionMessage, time());
 		} else {
 			return TRUE;
 		}
