@@ -134,8 +134,8 @@ class ApiService {
 					curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
 				}
 
-				$curlOptions['Content-Type'] = 'application/json';
-				$curlOptions['Content-Length'] = 'application/json';
+				$curlOptions[] = 'Content-Type: application/json';
+				$curlOptions[] = 'Content-Length: ' . strlen($jsonData);
 				break;
 			default:
 				$curlOptions['Content-Type'] = 'text/plain';
