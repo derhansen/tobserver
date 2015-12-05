@@ -14,6 +14,7 @@ namespace Derhansen\Tobserver\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Derhansen\Tobserver\Utility\ApiActions;
 use TYPO3\CMS\Extbase\Mvc\Exception\CommandException;
 
 /**
@@ -93,7 +94,7 @@ class ApiService
             'beusers' => $this->backendUserService->getBackendUsers(),
         );
 
-        $result = $this->sendRequest('POST', '/instancestatus/' . $this->instanceId, $data);
+        $result = $this->sendRequest('POST', ApiActions::UPDATE_INSTANCE_STATUS, $this->instanceId, $data);
         return $result;
     }
 
@@ -105,7 +106,7 @@ class ApiService
      */
     public function checkApiConnectivity()
     {
-        $result = $this->sendRequest('GET', '/checkconnectivity/' . $this->instanceId);
+        $result = $this->sendRequest('GET', ApiActions::CHECK_CONNECTIVITY, $this->instanceId);
         return $result;
     }
 
@@ -115,14 +116,15 @@ class ApiService
      *
      * @param string $method
      * @param string $action
+     * @param string $instanceId
      * @param string $data
      * @return bool
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
      */
-    protected function sendRequest($method, $action, $data = '')
+    protected function sendRequest($method, $action, $instanceId, $data = '')
     {
         if (!$this->initialized) {
-            throw new CommandException('Configuration error - check tObserver extension settings', time());
+            throw new CommandException('Configuration error - check tObserver extension settings.', time());
         }
 
         $curl = curl_init();
@@ -148,7 +150,7 @@ class ApiService
                 $curlOptions['Content-Type'] = 'text/plain';
         }
 
-        curl_setopt($curl, CURLOPT_URL, $this->apiUrl . $action);
+        curl_setopt($curl, CURLOPT_URL, $this->apiUrl . '/' . $action . '/' . $instanceId);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
