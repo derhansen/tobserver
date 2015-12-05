@@ -21,151 +21,158 @@ use TYPO3\CMS\Extbase\Mvc\Exception\CommandException;
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class ApiService {
+class ApiService
+{
 
-	protected $initialized = FALSE;
+    protected $initialized = false;
 
-	protected $instanceId = '';
+    protected $instanceId = '';
 
-	protected $authToken = '';
+    protected $authToken = '';
 
-	protected $apiUrl = '';
+    protected $apiUrl = '';
 
-	/**
-	 * @var \Derhansen\Tobserver\Service\ExtensionService
-	 * @inject
-	 */
-	protected $extensionService;
+    /**
+     * @var \Derhansen\Tobserver\Service\ExtensionService
+     * @inject
+     */
+    protected $extensionService;
 
-	/**
-	 * DI for extensionService
-	 *
-	 * @param ExtensionService $extensionService
-	 */
-	public function injectExtensionService(\Derhansen\Tobserver\Service\ExtensionService $extensionService) {
-		$this->extensionService = $extensionService;
-	}
+    /**
+     * DI for extensionService
+     *
+     * @param ExtensionService $extensionService
+     */
+    public function injectExtensionService(\Derhansen\Tobserver\Service\ExtensionService $extensionService)
+    {
+        $this->extensionService = $extensionService;
+    }
 
-	/**
-	 * @var \Derhansen\Tobserver\Service\BackendUserService
-	 * @inject
-	 */
-	protected $backendUserService;
+    /**
+     * @var \Derhansen\Tobserver\Service\BackendUserService
+     * @inject
+     */
+    protected $backendUserService;
 
-	/**
-	 * DI for backendUserService
-	 *
-	 * @param BackendUserService $backendUserService
-	 */
-	public function injectBackendUserService(\Derhansen\Tobserver\Service\BackendUserService $backendUserService) {
-		$this->backendUserService = $backendUserService;
-	}
+    /**
+     * DI for backendUserService
+     *
+     * @param BackendUserService $backendUserService
+     */
+    public function injectBackendUserService(\Derhansen\Tobserver\Service\BackendUserService $backendUserService)
+    {
+        $this->backendUserService = $backendUserService;
+    }
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$extConf = unserialize ($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['tobserver']);
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['tobserver']);
 
-		if ($extConf['instanceId'] && $extConf['authToken'] && $extConf['apiUrl']) {
-			$this->instanceId = $extConf['instanceId'];
-			$this->authToken = $extConf['authToken'];
-			$this->apiUrl = $extConf['apiUrl'];
-			$this->initialized = TRUE;
-		}
-	}
+        if ($extConf['instanceId'] && $extConf['authToken'] && $extConf['apiUrl']) {
+            $this->instanceId = $extConf['instanceId'];
+            $this->authToken = $extConf['authToken'];
+            $this->apiUrl = $extConf['apiUrl'];
+            $this->initialized = true;
+        }
+    }
 
-	/**
-	 * Updates the status of the instance
-	 *
-	 * @return bool
-	 * @throws CommandException
-	 */
-	public function updateStatus() {
-		$data = array (
-			'typo3_core_version' => TYPO3_version,
-			'extensions' => $this->extensionService->getInstalledExtensions(),
-			'beusers' => $this->backendUserService->getBackendUsers(),
-		);
+    /**
+     * Updates the status of the instance
+     *
+     * @return bool
+     * @throws CommandException
+     */
+    public function updateStatus()
+    {
+        $data = array(
+            'typo3_core_version' => TYPO3_version,
+            'extensions' => $this->extensionService->getInstalledExtensions(),
+            'beusers' => $this->backendUserService->getBackendUsers(),
+        );
 
-		$result = $this->sendRequest('POST', '/instancestatus/' . $this->instanceId, $data);
-		return $result;
-	}
+        $result = $this->sendRequest('POST', '/instancestatus/' . $this->instanceId, $data);
+        return $result;
+    }
 
-	/**
-	 * Checks API Connectivity
-	 *
-	 * @return bool
-	 * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
-	 */
-	public function checkApiConnectivity() {
-		$result = $this->sendRequest('GET', '/checkconnectivity/' . $this->instanceId);
-		return $result;
-	}
+    /**
+     * Checks API Connectivity
+     *
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
+     */
+    public function checkApiConnectivity()
+    {
+        $result = $this->sendRequest('GET', '/checkconnectivity/' . $this->instanceId);
+        return $result;
+    }
 
 
-	/**
-	 * Sends the API request
-	 *
-	 * @param string $method
-	 * @param string $action
-	 * @param string $data
-	 * @return bool
-	 * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
-	 */
-	protected function sendRequest($method, $action, $data = '') {
-		if (!$this->initialized) {
-			throw new CommandException('Configuration error - check tObserver extension settings', time());
-		}
+    /**
+     * Sends the API request
+     *
+     * @param string $method
+     * @param string $action
+     * @param string $data
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
+     */
+    protected function sendRequest($method, $action, $data = '')
+    {
+        if (!$this->initialized) {
+            throw new CommandException('Configuration error - check tObserver extension settings', time());
+        }
 
-		$curl = curl_init();
-		$jsonData = json_encode($data);
-		$exceptionMessage = '';
+        $curl = curl_init();
+        $jsonData = json_encode($data);
+        $exceptionMessage = '';
 
-		$curlOptions = array(
-			'x-auth-token: ' . $this->authToken
-		);
+        $curlOptions = array(
+            'x-auth-token: ' . $this->authToken
+        );
 
-		switch ($method) {
-			case 'POST':
-				curl_setopt($curl, CURLOPT_POST, 1);
+        switch ($method) {
+            case 'POST':
+                curl_setopt($curl, CURLOPT_POST, 1);
 
-				if ($data) {
-					curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
-				}
+                if ($data) {
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
+                }
 
-				$curlOptions[] = 'Content-Type: application/json';
-				$curlOptions[] = 'Content-Length: ' . strlen($jsonData);
-				break;
-			default:
-				$curlOptions['Content-Type'] = 'text/plain';
-		}
+                $curlOptions[] = 'Content-Type: application/json';
+                $curlOptions[] = 'Content-Length: ' . strlen($jsonData);
+                break;
+            default:
+                $curlOptions['Content-Type'] = 'text/plain';
+        }
 
-		curl_setopt($curl, CURLOPT_URL, $this->apiUrl . $action);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_HEADER, 1);
+        curl_setopt($curl, CURLOPT_URL, $this->apiUrl . $action);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 1);
 
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $curlOptions);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $curlOptions);
 
-		$response = curl_exec($curl);
-		$httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-		curl_close($curl);
+        curl_close($curl);
 
-		switch($httpcode) {
-			case '0':
-				$exceptionMessage = 'API failure - API may be down.';
-				break;
-			case '401':
-				$exceptionMessage = 'API connectivity check not successful due to Authentication failure.';
-				break;
-			default:
-		}
+        switch ($httpcode) {
+            case '0':
+                $exceptionMessage = 'API failure - API may be down.';
+                break;
+            case '401':
+                $exceptionMessage = 'API connectivity check not successful due to Authentication failure.';
+                break;
+            default:
+        }
 
-		if ($exceptionMessage) {
-			throw new CommandException($exceptionMessage, time());
-		} else {
-			return TRUE;
-		}
-	}
+        if ($exceptionMessage) {
+            throw new CommandException($exceptionMessage, time());
+        } else {
+            return true;
+        }
+    }
 }

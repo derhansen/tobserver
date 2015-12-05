@@ -20,29 +20,32 @@ use TYPO3\CMS\Core\Utility\DebugUtility;
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class InstanceStatusCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController {
+class InstanceStatusCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController
+{
 
-	/**
-	 * @var \Derhansen\Tobserver\Service\ApiService
-	 * @inject
-	 */
-	protected $apiService;
+    /**
+     * @var \Derhansen\Tobserver\Service\ApiService
+     * @inject
+     */
+    protected $apiService;
 
-	/**
-	 * The updateStatus command
-	 *
-	 * @return bool
-	 */
-	public function updateCommand() {
-		return $this->apiService->updateStatus();
-	}
+    /**
+     * The updateStatus command
+     *
+     * @return bool
+     */
+    public function updateCommand()
+    {
+        return $this->apiService->updateStatus();
+    }
 
-	/**
-	 * The checkApiConnectivity command
-	 *
-	 * @return bool
-	 */
-	public function checkApiConnectivityCommand() {
-		return $this->apiService->checkApiConnectivity();
-	}
+    /**
+     * The checkApiConnectivity command
+     *
+     * @return bool
+     */
+    public function checkApiConnectivityCommand()
+    {
+        return $this->apiService->checkApiConnectivity();
+    }
 }

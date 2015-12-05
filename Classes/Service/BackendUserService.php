@@ -23,60 +23,64 @@ use \TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class BackendUserService {
+class BackendUserService
+{
 
-	/**
-	 * @var \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
-	 */
-	protected $backendUserRepository;
+    /**
+     * @var \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
+     */
+    protected $backendUserRepository;
 
-	/**
-	 * DI for backendUserRepository
-	 *
-	 * @param BackendUserRepository $backendUserRepository
-	 */
-	public function injectBackendUserRepository(BackendUserRepository $backendUserRepository) {
-		$this->backendUserRepository = $backendUserRepository;
-	}
+    /**
+     * DI for backendUserRepository
+     *
+     * @param BackendUserRepository $backendUserRepository
+     */
+    public function injectBackendUserRepository(BackendUserRepository $backendUserRepository)
+    {
+        $this->backendUserRepository = $backendUserRepository;
+    }
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 */
-	protected $objectManager;
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+     */
+    protected $objectManager;
 
-	/**
-	 * DI for objectManager
-	 *
-	 * @param ObjectManagerInterface $objectManager
-	 */
-	public function injectObjectManager(ObjectManagerInterface $objectManager) {
-		$this->objectManager = $objectManager;
-	}
+    /**
+     * DI for objectManager
+     *
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function injectObjectManager(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
-	/**
-	 * Returns an array of backend users (not hidden/deleted)
-	 *
-	 * @return array
-	 */
-	public function getBackendUsers() {
-		$users = array();
+    /**
+     * Returns an array of backend users (not hidden/deleted)
+     *
+     * @return array
+     */
+    public function getBackendUsers()
+    {
+        $users = array();
 
-		$demand = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\Demand');
-		$demand->setStatus(1); // Only active users
+        $demand = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\Demand');
+        $demand->setStatus(1); // Only active users
 
-		$result = $this->backendUserRepository->findDemanded($demand);
-		/** @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser $backendUser */
-		foreach ($result as $backendUser) {
-			$users[] = array(
-				'username' => $backendUser->getUsername(),
-				'realname' => $backendUser->getRealName(),
-				'is_admin' => $backendUser->getIsAdministrator(),
-				'last_login' => $backendUser->getLastLoginDateAndTime() ? $backendUser->getLastLoginDateAndTime()->getTimestamp() : NULL,
+        $result = $this->backendUserRepository->findDemanded($demand);
+        /** @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser $backendUser */
+        foreach ($result as $backendUser) {
+            $users[] = array(
+                'username' => $backendUser->getUsername(),
+                'realname' => $backendUser->getRealName(),
+                'is_admin' => $backendUser->getIsAdministrator(),
+                'last_login' => $backendUser->getLastLoginDateAndTime() ? $backendUser->getLastLoginDateAndTime()->getTimestamp() : null,
 
-			);
-		}
+            );
+        }
 
-		return $users;
-	}
+        return $users;
+    }
 
 }

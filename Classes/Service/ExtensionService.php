@@ -21,43 +21,46 @@ use TYPO3\CMS\Core\Utility\DebugUtility;
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class ExtensionService {
+class ExtensionService
+{
 
-	/**
-	 * @var \TYPO3\CMS\Extensionmanager\Utility\ListUtility
-	 */
-	protected $emListUtility;
+    /**
+     * @var \TYPO3\CMS\Extensionmanager\Utility\ListUtility
+     */
+    protected $emListUtility;
 
-	/**
-	 * DI for emListUtility
-	 *
-	 * @param \TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility
-	 */
-	public function injectEmListUtility(\TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility) {
-		$this->emListUtility = $emListUtility;
-	}
+    /**
+     * DI for emListUtility
+     *
+     * @param \TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility
+     */
+    public function injectEmListUtility(\TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility)
+    {
+        $this->emListUtility = $emListUtility;
+    }
 
-	/**
-	 * Returns an array of local installed extensions which contain a version number
-	 *
-	 * @return array
-	 */
-	public function getInstalledExtensions() {
-		$extensions = array();
-		$installedExtensions = $this->emListUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
+    /**
+     * Returns an array of local installed extensions which contain a version number
+     *
+     * @return array
+     */
+    public function getInstalledExtensions()
+    {
+        $extensions = array();
+        $installedExtensions = $this->emListUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
 
-		foreach ($installedExtensions as $installedExtension) {
-			if ($installedExtension['type'] === 'Local' && $installedExtension['version']) {
-				$extensions[] = array(
-					'key' => $installedExtension['key'],
-					'title' => $installedExtension['title'],
-					'version' => $installedExtension['version'],
-					'installed' => $installedExtension['installed']
-				);
-			}
-		}
+        foreach ($installedExtensions as $installedExtension) {
+            if ($installedExtension['type'] === 'Local' && $installedExtension['version']) {
+                $extensions[] = array(
+                    'key' => $installedExtension['key'],
+                    'title' => $installedExtension['title'],
+                    'version' => $installedExtension['version'],
+                    'installed' => $installedExtension['installed']
+                );
+            }
+        }
 
-		return $extensions;
-	}
+        return $extensions;
+    }
 
 }
