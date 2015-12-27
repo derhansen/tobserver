@@ -72,6 +72,7 @@ class BackendUserService
         /** @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser $backendUser */
         foreach ($result as $backendUser) {
             $users[] = array(
+                'userid' => $backendUser->getUid(),
                 'username' => $backendUser->getUsername(),
                 'realname' => $backendUser->getRealName(),
                 'is_admin' => $backendUser->getIsAdministrator(),
