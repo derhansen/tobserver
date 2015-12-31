@@ -1,8 +1,8 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'tobserver instance',
-	'description' => 'tobserver instance TYPO3 extension',
+	'title' => 'tObserver',
+	'description' => 'tObserver TYPO3 extension',
 	'category' => 'be',
 	'author' => 'Torben Hansen',
 	'author_email' => 'derhansen@gmail.com',
