@@ -3,8 +3,8 @@ tObserver TYPO3 Extension
 
 ## Intro
 
-This TYPO3 extension and tObserver is in beta state. Also tObserver.com is in a closed beta state- If you would like to
-get a test account, please contact me by e-mail at [hello@tobserver.com](mailto:hello@tobserver.com)
+This TYPO3 extension and tObserver is in beta state. If you have new ideas, please contact 
+me by e-mail at [hello@tobserver.com](mailto:hello@tobserver.com)
 
 ## What does it do?
 
