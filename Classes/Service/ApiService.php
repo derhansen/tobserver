@@ -35,7 +35,6 @@ class ApiService
 
     /**
      * @var \Derhansen\Tobserver\Service\ExtensionService
-     * @inject
      */
     protected $extensionService;
 
@@ -51,7 +50,6 @@ class ApiService
 
     /**
      * @var \Derhansen\Tobserver\Service\BackendUserService
-     * @inject
      */
     protected $backendUserService;
 
@@ -63,6 +61,21 @@ class ApiService
     public function injectBackendUserService(\Derhansen\Tobserver\Service\BackendUserService $backendUserService)
     {
         $this->backendUserService = $backendUserService;
+    }
+
+    /**
+     * @var \Derhansen\Tobserver\Service\EnvironmentService
+     */
+    protected $environmentService;
+
+    /**
+     * DI for backendUserService
+     *
+     * @param EnvironmentService $environmentService
+     */
+    public function injectEnvironmentService(\Derhansen\Tobserver\Service\EnvironmentService $environmentService)
+    {
+        $this->environmentService = $environmentService;
     }
 
     /**
@@ -92,6 +105,7 @@ class ApiService
             'typo3_core_version' => TYPO3_version,
             'extensions' => $this->extensionService->getInstalledExtensions(),
             'beusers' => $this->backendUserService->getBackendUsers(),
+            'environment' => $this->environmentService->getEnvironmentStatus()
         );
 
         $result = $this->sendRequest('POST', ApiActions::UPDATE_INSTANCE_STATUS, $this->instanceId, $data);

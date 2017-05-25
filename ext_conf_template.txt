@@ -5,7 +5,7 @@ instanceId =
 authToken=
 
 # cat=basic; type=string; label=tobserver.com API URL:
-apiUrl = https://tobserver.com/api/v1
+apiUrl = https://www.tobserver.com/api/v1
 
 # cat=privacy; type=boolean; label=Submit user ID to tobserver.com instead of username and realname:
 anonymizeUserdata = 1
