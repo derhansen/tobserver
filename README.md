@@ -21,7 +21,7 @@ More information about tObserver can be found [here](https://www.tobserver.com/a
 
 ## Installation
 
-Please refer to the [documentation](https://ww.tobserver.com/documentation#typo3-instance-setup "tObserver TYPO3 Extension setup") on the tObserver website.
+Please refer to the [documentation](https://www.tobserver.com/documentation#typo3-instance-setup "tObserver TYPO3 Extension setup") on the tObserver website.
 
 ## Contact
 
