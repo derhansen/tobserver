@@ -4,30 +4,40 @@
   "description": "tObserver TYPO3 extension required to send instance data to tobserver.com",
   "homepage": "https://github.com/derhansen/tobserver",
   "support": {
-	"issues": "https://github.com/derhansen/tobserver/issues"
+    "issues": "https://github.com/derhansen/tobserver/issues"
   },
   "authors": [
-	{
-	  "name": "Torben Hansen",
-	  "email": "derhansen@gmail.com",
-	  "homepage": "http://www.derhansen.com",
-	  "role": "Developer"
-	}
+    {
+      "name": "Torben Hansen",
+      "email": "derhansen@gmail.com",
+      "homepage": "http://www.derhansen.com",
+      "role": "Developer"
+    }
   ],
-  "keywords": ["TYPO3 CMS", "typo3 monitoring", "tobserver.com"],
-  "license": ["GPL-2.0+"],
+  "keywords": [
+    "TYPO3 CMS",
+    "typo3 monitoring",
+    "tobserver.com"
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
   "replace": {
     "tobserver": "self.version",
     "typo3-ter/tobserver": "self.version"
   },
   "autoload": {
-	"psr-4": {
-	  "Derhansen\\Tobserver\\": "Classes"
-	}
+    "psr-4": {
+      "Derhansen\\Tobserver\\": "Classes"
+    }
   },
   "extra": {
     "branch-alias": {
       "dev-master": "1.0.x-dev"
     }
+  },
+  "require": {
+    "ext-curl": "*",
+    "ext-json": "*"
   }
 }

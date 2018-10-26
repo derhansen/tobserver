@@ -2,18 +2,13 @@
 namespace Derhansen\Tobserver\Command;
 
 /*
- * This file is part of the TYPO3 CMS project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This file is part of the Extension "tobserver" for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
  */
-use TYPO3\CMS\Core\Utility\DebugUtility;
+
+use Derhansen\Tobserver\Service\ApiService;
 
 /**
  * Class InstanceStatusCommandController
@@ -22,12 +17,18 @@ use TYPO3\CMS\Core\Utility\DebugUtility;
  */
 class InstanceStatusCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController
 {
-
     /**
      * @var \Derhansen\Tobserver\Service\ApiService
-     * @inject
      */
     protected $apiService;
+
+    /**
+     * @param ApiService $apiService
+     */
+    public function injectApiService(ApiService $apiService)
+    {
+        $this->apiService = $apiService;
+    }
 
     /**
      * The updateStatus command
