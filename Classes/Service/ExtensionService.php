@@ -37,17 +37,17 @@ class ExtensionService
      */
     public function getInstalledExtensions()
     {
-        $extensions = array();
+        $extensions = [];
         $installedExtensions = $this->emListUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
 
         foreach ($installedExtensions as $installedExtension) {
             if ($installedExtension['type'] === 'Local') {
-                $extensions[] = array(
+                $extensions[] = [
                     'key' => $installedExtension['key'],
                     'title' => $installedExtension['title'],
                     'version' => $installedExtension['version'] ? $installedExtension['version'] : '0.0.0',
                     'installed' => $installedExtension['installed']
-                );
+                ];
             }
         }
 

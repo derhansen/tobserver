@@ -8,7 +8,10 @@ namespace Derhansen\Tobserver\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
@@ -58,11 +61,8 @@ class BackendUserService
      */
     public function __construct()
     {
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['tobserver']);
-
-        if ($extConf['anonymizeUserdata']) {
-            $this->anonymizeUserdata= (bool)$extConf['anonymizeUserdata'];
-        }
+        $this->anonymizeUserdata= (bool)GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get('tobserver', 'anonymizeUserdata');
     }
     /**
      * Returns an array of backend users (not hidden/deleted)
@@ -71,22 +71,22 @@ class BackendUserService
      */
     public function getBackendUsers()
     {
-        $users = array();
+        $users = [];
 
-        $demand = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\Demand');
+        $demand = $this->objectManager->get(Demand::class);
         $demand->setStatus(1); // Only active users
 
         $result = $this->backendUserRepository->findDemanded($demand);
         /** @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser $backendUser */
         foreach ($result as $backendUser) {
-            $users[] = array(
+            $users[] = [
                 'userid' => $backendUser->getUid(),
                 'username' => $this->anonymizeUserdata ? $backendUser->getUid() : $backendUser->getUserName(),
                 'realname' => $this->anonymizeUserdata ? 'N/A - Username is the UID of the BE user.' : $backendUser->getRealName(),
                 'is_admin' => $backendUser->getIsAdministrator(),
                 'last_login' => $backendUser->getLastLoginDateAndTime() ? $backendUser->getLastLoginDateAndTime()->getTimestamp() : null,
 
-            );
+            ];
         }
 
         return $users;

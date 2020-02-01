@@ -9,7 +9,9 @@ namespace Derhansen\Tobserver\Service;
  */
 
 use Derhansen\Tobserver\Utility\ApiActions;
-use TYPO3\CMS\Extbase\Mvc\Exception\CommandException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class ApiService
@@ -47,6 +49,11 @@ class ApiService
     protected $backendUserService;
 
     /**
+     * @var RequestFactory
+     */
+    protected $requestFactory;
+
+    /**
      * DI for backendUserService
      *
      * @param BackendUserService $backendUserService
@@ -72,11 +79,19 @@ class ApiService
     }
 
     /**
+     * @param RequestFactory $requestFactory
+     */
+    public function injectRequestFactory(RequestFactory $requestFactory)
+    {
+        $this->requestFactory = $requestFactory;
+    }
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['tobserver']);
+        $extConf =  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('tobserver');
 
         if ($extConf['instanceId'] && $extConf['authToken'] && $extConf['apiUrl']) {
             $this->instanceId = $extConf['instanceId'];
@@ -90,98 +105,50 @@ class ApiService
      * Updates the status of the instance
      *
      * @return bool
-     * @throws CommandException
      */
-    public function updateStatus()
+    public function updateStatus(): bool
     {
-        $data = array(
+        $data = [
             'typo3_core_version' => TYPO3_version,
             'extensions' => $this->extensionService->getInstalledExtensions(),
             'beusers' => $this->backendUserService->getBackendUsers(),
             'environment' => $this->environmentService->getEnvironmentStatus()
+        ];
+
+        $response = $this->requestFactory->request(
+            $this->apiUrl . '/' . ApiActions::UPDATE_INSTANCE_STATUS . '/' . $this->instanceId,
+            'POST',
+            [
+                'User-Agent' => 'TYPO3 Extension tobserver',
+                'headers' => [
+                    'x-auth-token' => $this->authToken,
+                'Content-Type' =>  'application/json',
+                ],
+                'body' => json_encode($data)
+            ]
         );
 
-        $result = $this->sendRequest('POST', ApiActions::UPDATE_INSTANCE_STATUS, $this->instanceId, $data);
-        return $result;
+        return $response->getStatusCode() === 200;
     }
 
     /**
      * Checks API Connectivity
      *
      * @return bool
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
      */
-    public function checkApiConnectivity()
+    public function checkApiConnectivity(): bool
     {
-        $result = $this->sendRequest('GET', ApiActions::CHECK_CONNECTIVITY, $this->instanceId);
-        return $result;
-    }
-
-
-    /**
-     * Sends the API request
-     *
-     * @param string $method
-     * @param string $action
-     * @param string $instanceId
-     * @param string $data
-     * @return bool
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\CommandException
-     */
-    protected function sendRequest($method, $action, $instanceId, $data = '')
-    {
-        if (!$this->initialized) {
-            throw new CommandException('Configuration error - check tObserver extension settings.', time());
-        }
-
-        $curl = curl_init();
-        $jsonData = json_encode($data);
-        $exceptionMessage = '';
-
-        $curlOptions = array(
-            'x-auth-token: ' . $this->authToken
+        $response = $this->requestFactory->request(
+            $this->apiUrl . '/' . ApiActions::CHECK_CONNECTIVITY . '/' . $this->instanceId,
+            'GET',
+            [
+                'User-Agent' => 'TYPO3 Extension tobserver',
+                'headers' => [
+                    'x-auth-token' => $this->authToken
+                ]
+            ]
         );
 
-        switch ($method) {
-            case 'POST':
-                curl_setopt($curl, CURLOPT_POST, 1);
-
-                if ($data) {
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
-                }
-
-                $curlOptions[] = 'Content-Type: application/json';
-                $curlOptions[] = 'Content-Length: ' . strlen($jsonData);
-                break;
-            default:
-                $curlOptions['Content-Type'] = 'text/plain';
-        }
-
-        curl_setopt($curl, CURLOPT_URL, $this->apiUrl . '/' . $action . '/' . $instanceId);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
-
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $curlOptions);
-
-        $response = curl_exec($curl);
-        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        curl_close($curl);
-
-        switch ($httpcode) {
-            case '0':
-                $exceptionMessage = 'API failure - API may be down.';
-                break;
-            case '401':
-                $exceptionMessage = 'API connectivity check not successful due to Authentication failure.';
-                break;
-            default:
-        }
-
-        if ($exceptionMessage) {
-            throw new CommandException($exceptionMessage, time());
-        } else {
-            return true;
-        }
+        return $response->getStatusCode() === 200;
     }
 }

@@ -9,7 +9,7 @@
   "authors": [
     {
       "name": "Torben Hansen",
-      "email": "derhansen@gmail.com",
+      "email": "torben@derhansen.com",
       "homepage": "http://www.derhansen.com",
       "role": "Developer"
     }
@@ -20,24 +20,18 @@
     "tobserver.com"
   ],
   "license": [
-    "GPL-2.0+"
+    "GPL-2.0-or-later"
   ],
   "replace": {
-    "tobserver": "self.version",
-    "typo3-ter/tobserver": "self.version"
+    "tobserver": "self.version"
   },
   "autoload": {
     "psr-4": {
       "Derhansen\\Tobserver\\": "Classes"
     }
   },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
-    }
-  },
   "require": {
-    "ext-curl": "*",
+    "typo3/cms-core": "^9.5 || ~10.2",
     "ext-json": "*"
   }
 }
