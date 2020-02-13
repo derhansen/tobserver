@@ -10,6 +10,7 @@ namespace Derhansen\Tobserver\Service;
 
 use Derhansen\Tobserver\Utility\ApiActions;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -110,6 +111,7 @@ class ApiService
     {
         $data = [
             'typo3_core_version' => TYPO3_version,
+            'composer_mode' => Environment::isComposerMode(),
             'extensions' => $this->extensionService->getInstalledExtensions(),
             'beusers' => $this->backendUserService->getBackendUsers(),
             'environment' => $this->environmentService->getEnvironmentStatus()
