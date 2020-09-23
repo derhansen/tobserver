@@ -46,6 +46,7 @@ class UpdateCommand extends Command
         $result = $apiService->updateStatus();
         if ($result) {
             $io->success('All done!');
+            return 0;
         } else {
             $io->error('API connection could not be established. Wrong credentials or API is down.');
             return 1;
