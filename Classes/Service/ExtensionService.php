@@ -8,10 +8,10 @@ namespace Derhansen\Tobserver\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use TYPO3\CMS\Extensionmanager\Utility\ListUtility;
+
 /**
  * Class ExtensionService
- *
- * @author Torben Hansen <derhansen@gmail.com>
  */
 class ExtensionService
 {
@@ -25,7 +25,7 @@ class ExtensionService
      *
      * @param \TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility
      */
-    public function injectEmListUtility(\TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility)
+    public function injectEmListUtility(ListUtility $emListUtility)
     {
         $this->emListUtility = $emListUtility;
     }

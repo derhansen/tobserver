@@ -10,8 +10,6 @@ namespace Derhansen\Tobserver\Utility;
 
 /**
  * ApiActions
- *
- * @author Torben Hansen <derhansen@gmail.com>
  */
 class ApiActions
 {

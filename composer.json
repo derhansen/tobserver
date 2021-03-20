@@ -31,7 +31,7 @@
     }
   },
   "require": {
-    "typo3/cms-core": "^9.5 || ~10.2",
+    "typo3/cms-core": "^9.5 || ^10.4 || ~11.0",
     "ext-json": "*"
   }
 }

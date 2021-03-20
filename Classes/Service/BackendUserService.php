@@ -16,8 +16,6 @@ use \TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * Class BackendUserService
- *
- * @author Torben Hansen <derhansen@gmail.com>
  */
 class BackendUserService
 {
@@ -32,8 +30,11 @@ class BackendUserService
     protected $backendUserRepository;
 
     /**
-     * DI for backendUserRepository
-     *
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * @param BackendUserRepository $backendUserRepository
      */
     public function injectBackendUserRepository(BackendUserRepository $backendUserRepository)
@@ -42,13 +43,6 @@ class BackendUserService
     }
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
-     * DI for objectManager
-     *
      * @param ObjectManagerInterface $objectManager
      */
     public function injectObjectManager(ObjectManagerInterface $objectManager)

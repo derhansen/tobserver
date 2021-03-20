@@ -1,18 +1,18 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'tObserver',
-    'description' => 'tObserver TYPO3 extension',
+    'title' => 'tObserver - free TYPO3 Monitoring',
+    'description' => 'Extension to send TYPO3 instance data to tObserver Monitoring Service',
     'category' => 'be',
     'author' => 'Torben Hansen',
     'author_email' => 'derhansen@gmail.com',
     'state' => 'stable',
     'uploadfolder' => '0',
     'clearCacheOnLoad' => 0,
-    'version' => '2.0.2',
+    'version' => '2.1.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.0-10.4.99',
+            'typo3' => '9.5.0-11.5.99',
         ],
         'conflicts' => [],
         'suggests' => [],

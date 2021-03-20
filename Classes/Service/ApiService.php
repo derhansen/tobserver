@@ -16,8 +16,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class ApiService
- *
- * @author Torben Hansen <derhansen@gmail.com>
  */
 class ApiService
 {
@@ -35,14 +33,9 @@ class ApiService
     protected $extensionService;
 
     /**
-     * DI for extensionService
-     *
-     * @param ExtensionService $extensionService
+     * @var RequestFactory
      */
-    public function injectExtensionService(\Derhansen\Tobserver\Service\ExtensionService $extensionService)
-    {
-        $this->extensionService = $extensionService;
-    }
+    protected $requestFactory;
 
     /**
      * @var \Derhansen\Tobserver\Service\BackendUserService
@@ -50,31 +43,30 @@ class ApiService
     protected $backendUserService;
 
     /**
-     * @var RequestFactory
-     */
-    protected $requestFactory;
-
-    /**
-     * DI for backendUserService
-     *
-     * @param BackendUserService $backendUserService
-     */
-    public function injectBackendUserService(\Derhansen\Tobserver\Service\BackendUserService $backendUserService)
-    {
-        $this->backendUserService = $backendUserService;
-    }
-
-    /**
      * @var \Derhansen\Tobserver\Service\EnvironmentService
      */
     protected $environmentService;
 
     /**
-     * DI for backendUserService
-     *
+     * @param ExtensionService $extensionService
+     */
+    public function injectExtensionService(ExtensionService $extensionService)
+    {
+        $this->extensionService = $extensionService;
+    }
+
+    /**
+     * @param BackendUserService $backendUserService
+     */
+    public function injectBackendUserService(BackendUserService $backendUserService)
+    {
+        $this->backendUserService = $backendUserService;
+    }
+
+    /**
      * @param EnvironmentService $environmentService
      */
-    public function injectEnvironmentService(\Derhansen\Tobserver\Service\EnvironmentService $environmentService)
+    public function injectEnvironmentService(EnvironmentService $environmentService)
     {
         $this->environmentService = $environmentService;
     }
@@ -124,7 +116,7 @@ class ApiService
                 'User-Agent' => 'TYPO3 Extension tobserver',
                 'headers' => [
                     'x-auth-token' => $this->authToken,
-                'Content-Type' =>  'application/json',
+                    'Content-Type' =>  'application/json',
                 ],
                 'body' => json_encode($data)
             ]

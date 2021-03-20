@@ -10,8 +10,6 @@ namespace Derhansen\Tobserver\Service;
 
 /**
  * Class EnvironmentService
- *
- * @author Torben Hansen <derhansen@gmail.com>
  */
 class EnvironmentService
 {

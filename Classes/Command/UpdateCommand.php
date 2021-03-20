@@ -40,6 +40,8 @@ class UpdateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+        /** @var ApiService $apiService */
         $apiService = $objectManager->get(ApiService::class);
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
