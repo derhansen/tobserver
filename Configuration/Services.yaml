@@ -1,20 +1,23 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
-    Derhansen\Tobserver\:
-        resource: '../Classes/*'
+  Derhansen\Tobserver\:
+    resource: '../Classes/*'
 
-    Derhansen\Tobserver\Command\CheckApiCommand:
-        tags:
-            - name: 'console.command'
-              command: 'tobserver:checkApi'
-              schedulable: true
+  Derhansen\Tobserver\Service\ApiService:
+    public: true
 
-    Derhansen\Tobserver\Command\UpdateCommand:
-        tags:
-            - name: 'console.command'
-              command: 'tobserver:update'
-              schedulable: true
+  Derhansen\Tobserver\Command\CheckApiCommand:
+    tags:
+      - name: 'console.command'
+        command: 'tobserver:checkApi'
+        schedulable: true
+
+  Derhansen\Tobserver\Command\UpdateCommand:
+    tags:
+      - name: 'console.command'
+        command: 'tobserver:update'
+        schedulable: true

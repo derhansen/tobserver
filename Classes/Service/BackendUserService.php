@@ -29,45 +29,24 @@ class BackendUserService
      */
     protected $backendUserRepository;
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
-     * @param BackendUserRepository $backendUserRepository
-     */
-    public function injectBackendUserRepository(BackendUserRepository $backendUserRepository)
+    public function __construct(BackendUserRepository $backendUserRepository)
     {
         $this->backendUserRepository = $backendUserRepository;
-    }
 
-    /**
-     * @param ObjectManagerInterface $objectManager
-     */
-    public function injectObjectManager(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
         $this->anonymizeUserdata= (bool)GeneralUtility::makeInstance(ExtensionConfiguration::class)
             ->get('tobserver', 'anonymizeUserdata');
     }
+
     /**
      * Returns an array of backend users (not hidden/deleted)
      *
      * @return array
      */
-    public function getBackendUsers()
+    public function getBackendUsers(): array
     {
         $users = [];
 
-        $demand = $this->objectManager->get(Demand::class);
+        $demand = GeneralUtility::makeInstance(Demand::class);
         $demand->setStatus(1); // Only active users
 
         $result = $this->backendUserRepository->findDemanded($demand);

@@ -10,7 +10,7 @@
     {
       "name": "Torben Hansen",
       "email": "torben@derhansen.com",
-      "homepage": "http://www.derhansen.com",
+      "homepage": "https://www.derhansen.com",
       "role": "Developer"
     }
   ],
@@ -31,7 +31,7 @@
     }
   },
   "require": {
-    "typo3/cms-core": "^9.5 || ^10.4 || ~11.0",
+    "typo3/cms-core": "^10.4 || ^11.5",
     "ext-json": "*"
   }
 }

@@ -16,26 +16,20 @@ use TYPO3\CMS\Extensionmanager\Utility\ListUtility;
 class ExtensionService
 {
     /**
-     * @var \TYPO3\CMS\Extensionmanager\Utility\ListUtility
+     * @var ListUtility
      */
     protected $emListUtility;
 
-    /**
-     * DI for emListUtility
-     *
-     * @param \TYPO3\CMS\Extensionmanager\Utility\ListUtility $emListUtility
-     */
-    public function injectEmListUtility(ListUtility $emListUtility)
+    public function __construct(ListUtility $emListUtility)
     {
         $this->emListUtility = $emListUtility;
     }
-
     /**
      * Returns an array of local installed extensions which contain a version number
      *
      * @return array
      */
-    public function getInstalledExtensions()
+    public function getInstalledExtensions(): array
     {
         $extensions = [];
         $installedExtensions = $this->emListUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
@@ -43,10 +37,10 @@ class ExtensionService
         foreach ($installedExtensions as $installedExtension) {
             if ($installedExtension['type'] === 'Local') {
                 $extensions[] = [
-                    'key' => $installedExtension['key'],
-                    'title' => $installedExtension['title'],
-                    'version' => $installedExtension['version'] ? $installedExtension['version'] : '0.0.0',
-                    'installed' => $installedExtension['installed']
+                    'key' => $installedExtension['key'] ?? 'N/A',
+                    'title' => $installedExtension['title'] ?? 'N/A',
+                    'version' => $installedExtension['version'] ?? '0.0.0',
+                    'installed' => $installedExtension['installed'] ?? false
                 ];
             }
         }

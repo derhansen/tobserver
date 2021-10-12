@@ -25,6 +25,14 @@ More information about tObserver can be found [here](https://www.tobserver.com/a
 
 Please refer to the [documentation](https://www.tobserver.com/documentation#typo3-instance-setup "tObserver TYPO3 Extension setup") on the tObserver website.
 
+## Versions
+
+| Version             | TYPO3       | PHP       | Support/Development                     |
+| ------------------- | ----------- | ----------|---------------------------------------- |
+| 3.x                 | 10.4 - 11.5 | >= 7.4    | Features, Bugfixes, Security Updates    |
+| 2.x                 |  9.5 - 11.5 | 7.2 - 7.4 | Security Updates                        |
+| 1.x                 |  6.2 - 9.5  | 5.5 - 7.4 | Support dropped                         |
+
 ## Contact
 
 If you have new ideas, please contact me by e-mail at [hello@tobserver.com](mailto:hello@tobserver.com)

@@ -18,7 +18,7 @@ class EnvironmentService
      *
      * @return array
      */
-    public function getEnvironmentStatus()
+    public function getEnvironmentStatus(): array
     {
         $statusInfo = [];
 

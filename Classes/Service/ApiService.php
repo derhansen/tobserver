@@ -12,6 +12,7 @@ use Derhansen\Tobserver\Utility\ApiActions;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -19,16 +20,28 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ApiService
 {
+    /**
+     * @var bool
+     */
     protected $initialized = false;
 
+    /**
+     * @var mixed|string
+     */
     protected $instanceId = '';
 
+    /**
+     * @var mixed|string
+     */
     protected $authToken = '';
 
+    /**
+     * @var mixed|string
+     */
     protected $apiUrl = '';
 
     /**
-     * @var \Derhansen\Tobserver\Service\ExtensionService
+     * @var ExtensionService
      */
     protected $extensionService;
 
@@ -38,55 +51,29 @@ class ApiService
     protected $requestFactory;
 
     /**
-     * @var \Derhansen\Tobserver\Service\BackendUserService
+     * @var BackendUserService
      */
     protected $backendUserService;
 
     /**
-     * @var \Derhansen\Tobserver\Service\EnvironmentService
+     * @var EnvironmentService
      */
     protected $environmentService;
 
-    /**
-     * @param ExtensionService $extensionService
-     */
-    public function injectExtensionService(ExtensionService $extensionService)
-    {
+    public function __construct(
+        ExtensionService $extensionService,
+        BackendUserService $backendUserService,
+        EnvironmentService $environmentService,
+        RequestFactory $requestFactory
+    ) {
         $this->extensionService = $extensionService;
-    }
-
-    /**
-     * @param BackendUserService $backendUserService
-     */
-    public function injectBackendUserService(BackendUserService $backendUserService)
-    {
         $this->backendUserService = $backendUserService;
-    }
-
-    /**
-     * @param EnvironmentService $environmentService
-     */
-    public function injectEnvironmentService(EnvironmentService $environmentService)
-    {
         $this->environmentService = $environmentService;
-    }
-
-    /**
-     * @param RequestFactory $requestFactory
-     */
-    public function injectRequestFactory(RequestFactory $requestFactory)
-    {
         $this->requestFactory = $requestFactory;
-    }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
         $extConf =  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('tobserver');
 
-        if ($extConf['instanceId'] && $extConf['authToken'] && $extConf['apiUrl']) {
+        if (($extConf['instanceId'] ?? false) && ($extConf['authToken'] ?? false) && ($extConf['apiUrl'] ?? false)) {
             $this->instanceId = $extConf['instanceId'];
             $this->authToken = $extConf['authToken'];
             $this->apiUrl = $extConf['apiUrl'];
@@ -101,8 +88,10 @@ class ApiService
      */
     public function updateStatus(): bool
     {
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
         $data = [
-            'typo3_core_version' => TYPO3_version,
+            'typo3_core_version' => $typo3Version->getVersion(),
             'composer_mode' => Environment::isComposerMode(),
             'extensions' => $this->extensionService->getInstalledExtensions(),
             'beusers' => $this->backendUserService->getBackendUsers(),
