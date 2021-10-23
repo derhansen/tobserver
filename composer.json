@@ -33,5 +33,10 @@
   "require": {
     "typo3/cms-core": "^10.4 || ^11.5",
     "ext-json": "*"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "tobserver"
+    }
   }
 }
