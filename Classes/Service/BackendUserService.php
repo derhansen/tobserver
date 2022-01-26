@@ -12,7 +12,6 @@ use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * Class BackendUserService

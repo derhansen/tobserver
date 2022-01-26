@@ -41,7 +41,7 @@ class EnvironmentService
 
         // Get webserver information
         $statusInfo['webserver'] = [
-            'software' => $_SERVER['SERVER_SOFTWARE']
+            'software' => $_SERVER['SERVER_SOFTWARE'] ?? ''
         ];
         return $statusInfo;
     }
