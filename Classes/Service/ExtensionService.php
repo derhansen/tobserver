@@ -26,8 +26,6 @@ class ExtensionService
     }
     /**
      * Returns an array of local installed extensions which contain a version number
-     *
-     * @return array
      */
     public function getInstalledExtensions(): array
     {

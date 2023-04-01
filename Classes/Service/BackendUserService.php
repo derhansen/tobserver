@@ -38,8 +38,6 @@ class BackendUserService
 
     /**
      * Returns an array of backend users (not hidden/deleted)
-     *
-     * @return array
      */
     public function getBackendUsers(): array
     {

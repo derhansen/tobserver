@@ -13,11 +13,13 @@ services:
   Derhansen\Tobserver\Command\CheckApiCommand:
     tags:
       - name: 'console.command'
+        description: 'Checks the API connectivity of the TYPO3 instance on tobserver.com'
         command: 'tobserver:checkApi'
         schedulable: true
 
   Derhansen\Tobserver\Command\UpdateCommand:
     tags:
       - name: 'console.command'
+        description: 'Updates the TYPO3 instance status on tobserver.com'
         command: 'tobserver:update'
         schedulable: true

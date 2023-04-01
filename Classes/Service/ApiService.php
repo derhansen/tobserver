@@ -83,8 +83,6 @@ class ApiService
 
     /**
      * Updates the status of the instance
-     *
-     * @return bool
      */
     public function updateStatus(): bool
     {
@@ -116,8 +114,6 @@ class ApiService
 
     /**
      * Checks API Connectivity
-     *
-     * @return bool
      */
     public function checkApiConnectivity(): bool
     {

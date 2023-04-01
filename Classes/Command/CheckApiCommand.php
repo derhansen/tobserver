@@ -22,33 +22,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class CheckApiCommand extends Command
 {
     /**
-     * Configuring the command options
-     */
-    public function configure()
-    {
-        $this->setDescription('Checks the API connectivity of the TYPO3 instance on tobserver.com');
-    }
-
-    /**
-     * Execute the cleanup command
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|void|null
+     * Execute the checkApi command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ApiService $apiService */
         $apiService = GeneralUtility::makeInstance(ApiService::class);
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
         $result = $apiService->checkApiConnectivity();
-        if ($result) {
-            $io->success('All done!');
-            return 0;
-        } else {
+        if (!$result) {
             $io->error('API connection could not be established. Wrong credentials or API is down.');
-            return 1;
+            return self::FAILURE;
         }
+
+        $io->success('All done!');
+        return self::SUCCESS;
     }
 }

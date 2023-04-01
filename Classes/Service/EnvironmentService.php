@@ -15,8 +15,6 @@ class EnvironmentService
 {
     /**
      * Returns information about the Server Environment
-     *
-     * @return array
      */
     public function getEnvironmentStatus(): array
     {
@@ -30,13 +28,13 @@ class EnvironmentService
             'postMaxSize' => ini_get('post_max_size'),
             'maxFileUploads' => ini_get('max_file_uploads'),
             'uploadMaxFilesize' => ini_get('upload_max_filesize'),
-            'phpSapiName' => php_sapi_name()
+            'phpSapiName' => php_sapi_name(),
         ];
 
         // Get OS information
         $statusInfo['os'] = [
             'uname' => php_uname(),
-            'platform' => PHP_OS
+            'platform' => PHP_OS,
         ];
 
         // Get webserver information
