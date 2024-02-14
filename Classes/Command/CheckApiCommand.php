@@ -24,7 +24,7 @@ class CheckApiCommand extends Command
     /**
      * Execute the checkApi command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $apiService = GeneralUtility::makeInstance(ApiService::class);
         $io = new SymfonyStyle($input, $output);
