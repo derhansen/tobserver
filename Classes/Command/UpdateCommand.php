@@ -24,7 +24,7 @@ class UpdateCommand extends Command
     /**
      * Execute the update command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $apiService = GeneralUtility::makeInstance(ApiService::class);
         $io = new SymfonyStyle($input, $output);
